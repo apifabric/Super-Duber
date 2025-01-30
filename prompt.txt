@@ -1,0 +1,3 @@
+ create a database application named "Super Duber" that will manage sets of information related to personnel and their skills and the demand for those skills in certain roles/jobs in the organization. for example, we would want to list a new role or job function and for this job we would list the skills required. also a list of staff who possess those skills. 
+.
+Create at least 12 tables (models)

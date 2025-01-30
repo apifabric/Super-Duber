@@ -1,0 +1,321 @@
+about:
+  date: January 30, 2025 19:57:21
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 11
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Department:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: head
+    - name: id
+    description: Table to store department details.
+    info_list: Table to store department details.
+    tab_groups:
+    - direction: toone
+      fks:
+      - head
+      name: personnel
+      resource: Personnel
+    type: Department
+    user_key: name
+  Feedback:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: personnel_id
+    - name: project_id
+    - name: feedback_note
+    description: Table to store feedback given by personnel for projects.
+    info_list: Table to store feedback given by personnel for projects.
+    tab_groups:
+    - direction: toone
+      fks:
+      - personnel_id
+      name: personnel
+      resource: Personnel
+    - direction: toone
+      fks:
+      - project_id
+      name: project
+      resource: Project
+    type: Feedback
+    user_key: id
+  JobRole:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: title
+    - name: id
+    description: Table to store job role details.
+    info_list: Table to store job role details.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - job_role_id
+      name: RoleSkillRequirementList
+      resource: RoleSkillRequirement
+    type: JobRole
+    user_key: description
+  Meeting:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: date
+      type: DATETIME
+    - name: id
+    description: Table to store meeting details.
+    info_list: Table to store meeting details.
+    type: Meeting
+    user_key: description
+  Personnel:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      search: true
+      sort: true
+    - name: last_name
+    - name: email
+    - name: phone_number
+    - name: id
+    description: Table to store personnel details.
+    info_list: Table to store personnel details.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - head
+      name: DepartmentList
+      resource: Department
+    - direction: tomany
+      fks:
+      - personnel_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - personnel_id
+      name: PersonnelSkillList
+      resource: PersonnelSkill
+    - direction: tomany
+      fks:
+      - personnel_id
+      name: PersonnelTrainingList
+      resource: PersonnelTraining
+    - direction: tomany
+      fks:
+      - personnel_id
+      name: ProjectAssignmentList
+      resource: ProjectAssignment
+    type: Personnel
+    user_key: first_name
+  PersonnelSkill:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: personnel_id
+    - name: skill_id
+    - name: proficiency_level
+    description: Table to store skills associated with personnel.
+    info_list: Table to store skills associated with personnel.
+    tab_groups:
+    - direction: toone
+      fks:
+      - personnel_id
+      name: personnel
+      resource: Personnel
+    - direction: toone
+      fks:
+      - skill_id
+      name: skill
+      resource: Skill
+    type: PersonnelSkill
+    user_key: id
+  PersonnelTraining:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: personnel_id
+    - name: training_id
+    - name: date_completed
+      type: DATE
+    description: Table to link personnel with their trainings.
+    info_list: Table to link personnel with their trainings.
+    tab_groups:
+    - direction: toone
+      fks:
+      - personnel_id
+      name: personnel
+      resource: Personnel
+    - direction: toone
+      fks:
+      - training_id
+      name: training
+      resource: Training
+    type: PersonnelTraining
+    user_key: id
+  Project:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: start_date
+      type: DATE
+    - name: end_date
+      type: DATE
+    - name: id
+    description: Table to store project details.
+    info_list: Table to store project details.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - project_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - project_id
+      name: ProjectAssignmentList
+      resource: ProjectAssignment
+    type: Project
+    user_key: name
+  ProjectAssignment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: personnel_id
+    - name: project_id
+    - name: role
+    description: Table to store project assignments.
+    info_list: Table to store project assignments.
+    tab_groups:
+    - direction: toone
+      fks:
+      - personnel_id
+      name: personnel
+      resource: Personnel
+    - direction: toone
+      fks:
+      - project_id
+      name: project
+      resource: Project
+    type: ProjectAssignment
+    user_key: id
+  RoleSkillRequirement:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: job_role_id
+    - name: skill_id
+    - name: level_required
+    description: Table to store skill requirements for a job role.
+    info_list: Table to store skill requirements for a job role.
+    tab_groups:
+    - direction: toone
+      fks:
+      - job_role_id
+      name: job_role
+      resource: JobRole
+    - direction: toone
+      fks:
+      - skill_id
+      name: skill
+      resource: Skill
+    type: RoleSkillRequirement
+    user_key: id
+  Skill:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: description
+    - name: id
+    description: Table to store skill details.
+    info_list: Table to store skill details.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - skill_id
+      name: PersonnelSkillList
+      resource: PersonnelSkill
+    - direction: tomany
+      fks:
+      - skill_id
+      name: RoleSkillRequirementList
+      resource: RoleSkillRequirement
+    type: Skill
+    user_key: name
+  Training:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: description
+    - name: id
+    - name: date_provided
+      type: DATE
+    description: Table to store details about training programs.
+    info_list: Table to store details about training programs.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - training_id
+      name: PersonnelTrainingList
+      resource: PersonnelTraining
+    type: Training
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'
