@@ -1,0 +1,53 @@
+{
+    "rules": [],
+    "models": [
+        {
+            "classname": "JobRole",
+            "code": "class JobRole(Base):  # type: ignore\n    \"\"\"\n    description: Table to store job role details.\n    \"\"\"\n    __tablename__ = 'job_role'\n    _s_collection_name = 'JobRole'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    title = Column(String(100))\n    description = Column(String(250))\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    RoleSkillRequirementList : Mapped[List[\"RoleSkillRequirement\"]] = relationship(back_populates=\"job_role\")"
+        },
+        {
+            "classname": "Meeting",
+            "code": "class Meeting(Base):  # type: ignore\n    \"\"\"\n    description: Table to store meeting details.\n    \"\"\"\n    __tablename__ = 'meeting'\n    _s_collection_name = 'Meeting'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    date = Column(DateTime)\n    description = Column(String(250))"
+        },
+        {
+            "classname": "Personnel",
+            "code": "class Personnel(Base):  # type: ignore\n    \"\"\"\n    description: Table to store personnel details.\n    \"\"\"\n    __tablename__ = 'personnel'\n    _s_collection_name = 'Personnel'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    first_name = Column(String(100))\n    last_name = Column(String(100))\n    email = Column(String(100))\n    phone_number = Column(String(50))\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    DepartmentList : Mapped[List[\"Department\"]] = relationship(back_populates=\"personnel\")\n    FeedbackList : Mapped[List[\"Feedback\"]] = relationship(back_populates=\"personnel\")\n    PersonnelSkillList : Mapped[List[\"PersonnelSkill\"]] = relationship(back_populates=\"personnel\")\n    PersonnelTrainingList : Mapped[List[\"PersonnelTraining\"]] = relationship(back_populates=\"personnel\")\n    ProjectAssignmentList : Mapped[List[\"ProjectAssignment\"]] = relationship(back_populates=\"personnel\")"
+        },
+        {
+            "classname": "Project",
+            "code": "class Project(Base):  # type: ignore\n    \"\"\"\n    description: Table to store project details.\n    \"\"\"\n    __tablename__ = 'project'\n    _s_collection_name = 'Project'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100))\n    start_date = Column(Date)\n    end_date = Column(Date)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    FeedbackList : Mapped[List[\"Feedback\"]] = relationship(back_populates=\"project\")\n    ProjectAssignmentList : Mapped[List[\"ProjectAssignment\"]] = relationship(back_populates=\"project\")"
+        },
+        {
+            "classname": "Skill",
+            "code": "class Skill(Base):  # type: ignore\n    \"\"\"\n    description: Table to store skill details.\n    \"\"\"\n    __tablename__ = 'skill'\n    _s_collection_name = 'Skill'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100))\n    description = Column(String(250))\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    PersonnelSkillList : Mapped[List[\"PersonnelSkill\"]] = relationship(back_populates=\"skill\")\n    RoleSkillRequirementList : Mapped[List[\"RoleSkillRequirement\"]] = relationship(back_populates=\"skill\")"
+        },
+        {
+            "classname": "Training",
+            "code": "class Training(Base):  # type: ignore\n    \"\"\"\n    description: Table to store details about training programs.\n    \"\"\"\n    __tablename__ = 'training'\n    _s_collection_name = 'Training'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100))\n    description = Column(String(250))\n    date_provided = Column(Date)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    PersonnelTrainingList : Mapped[List[\"PersonnelTraining\"]] = relationship(back_populates=\"training\")"
+        },
+        {
+            "classname": "Department",
+            "code": "class Department(Base):  # type: ignore\n    \"\"\"\n    description: Table to store department details.\n    \"\"\"\n    __tablename__ = 'department'\n    _s_collection_name = 'Department'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100))\n    head = Column(ForeignKey('personnel.id'))\n\n    # parent relationships (access parent)\n    personnel : Mapped[\"Personnel\"] = relationship(back_populates=(\"DepartmentList\"))"
+        },
+        {
+            "classname": "Feedback",
+            "code": "class Feedback(Base):  # type: ignore\n    \"\"\"\n    description: Table to store feedback given by personnel for projects.\n    \"\"\"\n    __tablename__ = 'feedback'\n    _s_collection_name = 'Feedback'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    personnel_id = Column(ForeignKey('personnel.id'))\n    project_id = Column(ForeignKey('project.id'))\n    feedback_note = Column(String(500))\n\n    # parent relationships (access parent)\n    personnel : Mapped[\"Personnel\"] = relationship(back_populates=(\"FeedbackList\"))\n    project : Mapped[\"Project\"] = relationship(back_populates=(\"FeedbackList\"))"
+        },
+        {
+            "classname": "PersonnelSkill",
+            "code": "class PersonnelSkill(Base):  # type: ignore\n    \"\"\"\n    description: Table to store skills associated with personnel.\n    \"\"\"\n    __tablename__ = 'personnel_skill'\n    _s_collection_name = 'PersonnelSkill'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    personnel_id = Column(ForeignKey('personnel.id'))\n    skill_id = Column(ForeignKey('skill.id'))\n    proficiency_level = Column(String(50))\n\n    # parent relationships (access parent)\n    personnel : Mapped[\"Personnel\"] = relationship(back_populates=(\"PersonnelSkillList\"))\n    skill : Mapped[\"Skill\"] = relationship(back_populates=(\"PersonnelSkillList\"))"
+        },
+        {
+            "classname": "PersonnelTraining",
+            "code": "class PersonnelTraining(Base):  # type: ignore\n    \"\"\"\n    description: Table to link personnel with their trainings.\n    \"\"\"\n    __tablename__ = 'personnel_training'\n    _s_collection_name = 'PersonnelTraining'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    personnel_id = Column(ForeignKey('personnel.id'))\n    training_id = Column(ForeignKey('training.id'))\n    date_completed = Column(Date)\n\n    # parent relationships (access parent)\n    personnel : Mapped[\"Personnel\"] = relationship(back_populates=(\"PersonnelTrainingList\"))\n    training : Mapped[\"Training\"] = relationship(back_populates=(\"PersonnelTrainingList\"))"
+        },
+        {
+            "classname": "ProjectAssignment",
+            "code": "class ProjectAssignment(Base):  # type: ignore\n    \"\"\"\n    description: Table to store project assignments.\n    \"\"\"\n    __tablename__ = 'project_assignment'\n    _s_collection_name = 'ProjectAssignment'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    personnel_id = Column(ForeignKey('personnel.id'))\n    project_id = Column(ForeignKey('project.id'))\n    role = Column(String(100))\n\n    # parent relationships (access parent)\n    personnel : Mapped[\"Personnel\"] = relationship(back_populates=(\"ProjectAssignmentList\"))\n    project : Mapped[\"Project\"] = relationship(back_populates=(\"ProjectAssignmentList\"))"
+        },
+        {
+            "classname": "RoleSkillRequirement",
+            "code": "class RoleSkillRequirement(Base):  # type: ignore\n    \"\"\"\n    description: Table to store skill requirements for a job role.\n    \"\"\"\n    __tablename__ = 'role_skill_requirement'\n    _s_collection_name = 'RoleSkillRequirement'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    job_role_id = Column(ForeignKey('job_role.id'))\n    skill_id = Column(ForeignKey('skill.id'))\n    level_required = Column(String(50))\n\n    # parent relationships (access parent)\n    job_role : Mapped[\"JobRole\"] = relationship(back_populates=(\"RoleSkillRequirementList\"))\n    skill : Mapped[\"Skill\"] = relationship(back_populates=(\"RoleSkillRequirementList\"))"
+        }
+    ]
+}
